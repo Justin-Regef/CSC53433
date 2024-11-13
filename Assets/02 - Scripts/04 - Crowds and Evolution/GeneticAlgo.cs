@@ -74,14 +74,17 @@ public class GeneticAlgo : MonoBehaviour
         customTerrain.saveDetails();
         for (int i = 0; i < decomposing_animals.Count; i++) {
             float dice_roll = UnityEngine.Random.value;
-            if (dice_roll < 0.20f){
+            if (dice_roll < 0.01f){
                 Animal animal = decomposing_animals[i].GetComponent<Animal>();
                 decomposing_animals.Remove(animal.transform.gameObject);
                 int dx = (int)(animal.tfm.position.x / animal.terrainSize.x * detail_sz.x);
                 int dy = (int)(animal.tfm.position.z / animal.terrainSize.y * detail_sz.y);
                 dice_roll = UnityEngine.Random.value;
                 if (dice_roll < 0.1f) {details[dy, dx] = 1;}
-                //else {details[dy, dx] = 2;}
+                else if (dice_roll < 0.5f) {
+                    //different_layer = GetComponent<Terrain>().terrainData.GetDetailLayer() TODO https://docs.unity3d.com/ScriptReference/TerrainData.GetDetailLayer.html
+                    details[dy, dx] = 2;
+                    }
                 Destroy(animal.transform.gameObject);
             }
         }
