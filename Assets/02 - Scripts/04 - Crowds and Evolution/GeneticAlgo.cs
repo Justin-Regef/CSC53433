@@ -8,14 +8,15 @@ public class GeneticAlgo : MonoBehaviour
 {
 
     [Header("Genetic Algorithm parameters")]
-    public int popSize = 100;
+    public int popSize = 10;
     public GameObject animalPrefab;
 
     [Header("Dynamic elements")]
-    public float vegetationGrowthRate = 1.0f;
+    public float vegetationGrowthRate = 0.0f;
     public float currentGrowth;
 
     private List<GameObject> animals;
+    private List<GameObject> decomposing_animals;
     protected Terrain terrain;
     protected CustomTerrain customTerrain;
     protected float width;
@@ -34,6 +35,7 @@ public class GeneticAlgo : MonoBehaviour
 
         // Initialize animals array.
         animals = new List<GameObject>();
+        decomposing_animals = new List<GameObject>();
         for (int i = 0; i < popSize; i++)
         {
             GameObject animal = makeAnimal();
@@ -44,11 +46,11 @@ public class GeneticAlgo : MonoBehaviour
     void Update()
     {
         // Keeps animal to a minimum.
-        while (animals.Count < popSize / 2)
+        while ((animals.Count + decomposing_animals.Count) < popSize / 2)
         {
             animals.Add(makeAnimal());
         }
-        customTerrain.debug.text = "N° animals: " + animals.Count.ToString();
+        customTerrain.debug.text = "N animals: " + animals.Count.ToString() + "    N decomposing: " + decomposing_animals.Count.ToString();
 
         // Update grass elements/food resources.
         updateResources();
@@ -68,6 +70,20 @@ public class GeneticAlgo : MonoBehaviour
             int y = (int)(UnityEngine.Random.value * detail_sz.y);
             details[y, x] = 1;
             currentGrowth -= 1.0f;
+        }
+        customTerrain.saveDetails();
+        for (int i = 0; i < decomposing_animals.Count; i++) {
+            float dice_roll = UnityEngine.Random.value;
+            if (dice_roll < 0.20f){
+                Animal animal = decomposing_animals[i].GetComponent<Animal>();
+                decomposing_animals.Remove(animal.transform.gameObject);
+                int dx = (int)(animal.tfm.position.x / animal.terrainSize.x * detail_sz.x);
+                int dy = (int)(animal.tfm.position.z / animal.terrainSize.y * detail_sz.y);
+                dice_roll = UnityEngine.Random.value;
+                if (dice_roll < 0.1f) {details[dy, dx] = 1;}
+                //else {details[dy, dx] = 2;}
+                Destroy(animal.transform.gameObject);
+            }
         }
         customTerrain.saveDetails();
     }
@@ -116,8 +132,10 @@ public class GeneticAlgo : MonoBehaviour
     /// <param name="animal"></param>
     public void removeAnimal(Animal animal)
     {
+        animal.isDead = true;
         animals.Remove(animal.transform.gameObject);
-        Destroy(animal.transform.gameObject);
+        decomposing_animals.Add(animal.transform.gameObject);
+        //Destroy(animal.transform.gameObject);
     }
 
 }

@@ -19,6 +19,10 @@ public class CapsuleAutoController : MonoBehaviour {
     }
 
     void Update() {
+        Animal animal = GetComponent<Animal>();
+        if (animal.isDead) {
+            return;
+            }
         Vector3 scale = terrain.terrainData.heightmapScale;
         Transform tfm = transform;
         Vector3 v = tfm.rotation * Vector3.forward * max_speed;

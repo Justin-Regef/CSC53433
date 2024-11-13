@@ -19,6 +19,7 @@ public class Animal : MonoBehaviour
     public float lossEnergy = 0.1f;
     public float gainEnergy = 10.0f;
     private float energy;
+    public bool isDead = false;
 
     [Header("Sensor - Vision")]
     public float maxVision = 20.0f;
@@ -31,11 +32,11 @@ public class Animal : MonoBehaviour
     // Terrain.
     private CustomTerrain terrain = null;
     private int[,] details = null;
-    private Vector2 detailSize;
-    private Vector2 terrainSize;
+    public Vector2 detailSize;
+    public Vector2 terrainSize;
 
     // Animal.
-    private Transform tfm;
+    public Transform tfm;
     private float[] vision;
 
     // Genetic alg.
@@ -69,6 +70,11 @@ public class Animal : MonoBehaviour
         if (details == null)
         {
             UpdateSetup();
+            return;
+        }
+
+        if (isDead) {
+            mat.color = Color.red;
             return;
         }
 
