@@ -70,3 +70,5 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 Assets/04 - Terrain Assets/.DS_Store
+Assets/00 - Scenes/Scene - 1.unity
+Assets/04 - Terrain Assets/Terrain Data/New Terrain.asset
