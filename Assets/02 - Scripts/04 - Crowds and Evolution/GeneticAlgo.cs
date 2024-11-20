@@ -17,6 +17,7 @@ public class GeneticAlgo : MonoBehaviour
 
     private List<GameObject> animals;
     private List<GameObject> decomposing_animals;
+    private List<GameObject> zombies;
     protected Terrain terrain;
     protected CustomTerrain customTerrain;
     protected float width;
@@ -36,6 +37,7 @@ public class GeneticAlgo : MonoBehaviour
         // Initialize animals array.
         animals = new List<GameObject>();
         decomposing_animals = new List<GameObject>();
+        zombies = new List<GameObject>();
         for (int i = 0; i < popSize; i++)
         {
             GameObject animal = makeAnimal();
@@ -71,20 +73,21 @@ public class GeneticAlgo : MonoBehaviour
             details[y, x] = 1;
             currentGrowth -= 1.0f;
         }
-        customTerrain.saveDetails();
         for (int i = 0; i < decomposing_animals.Count; i++) {
             float dice_roll = UnityEngine.Random.value;
-            if (dice_roll < 0.01f){
+             if (dice_roll < 0.001f){
+                Animal animal = decomposing_animals[i].GetComponent<Animal>();
+                decomposing_animals.Remove(animal.transform.gameObject);
+                zombies.Add(animal.transform.gameObject);
+                animal.isZombie = true;
+                animal.isDead = false;
+            }
+            else if (dice_roll < 0.02f){
                 Animal animal = decomposing_animals[i].GetComponent<Animal>();
                 decomposing_animals.Remove(animal.transform.gameObject);
                 int dx = (int)(animal.tfm.position.x / animal.terrainSize.x * detail_sz.x);
                 int dy = (int)(animal.tfm.position.z / animal.terrainSize.y * detail_sz.y);
-                dice_roll = UnityEngine.Random.value;
-                if (dice_roll < 0.1f) {details[dy, dx] = 1;}
-                else if (dice_roll < 0.5f) {
-                    //different_layer = GetComponent<Terrain>().terrainData.GetDetailLayer() TODO https://docs.unity3d.com/ScriptReference/TerrainData.GetDetailLayer.html
-                    details[dy, dx] = 2;
-                    }
+                details[dy, dx] = 1;
                 Destroy(animal.transform.gameObject);
             }
         }

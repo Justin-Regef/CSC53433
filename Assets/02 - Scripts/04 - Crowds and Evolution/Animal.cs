@@ -20,6 +20,7 @@ public class Animal : MonoBehaviour
     public float gainEnergy = 10.0f;
     private float energy;
     public bool isDead = false;
+    public bool isZombie = false;
 
     [Header("Sensor - Vision")]
     public float maxVision = 20.0f;
@@ -43,7 +44,7 @@ public class Animal : MonoBehaviour
     private GeneticAlgo genetic_algo = null;
 
     // Renderer.
-    private Material mat = null;
+    public Material mat = null;
 
     void Start()
     {
@@ -77,6 +78,9 @@ public class Animal : MonoBehaviour
             mat.color = Color.red;
             return;
         }
+        if (isZombie) {
+            mat.color = Color.green;
+        }
 
         // Retrieve animal location in the heighmap
         int dx = (int)((tfm.position.x / terrainSize.x) * detailSize.x);
@@ -98,14 +102,14 @@ public class Animal : MonoBehaviour
         }
 
         // If the energy is below 0, the animal dies.
-        if (energy < 0)
+        if (energy < 0 && !isZombie)
         {
             energy = 0.0f;
             genetic_algo.removeAnimal(this);
         }
 
         // Update the color of the animal as a function of the energy that it contains.
-        if (mat != null)
+        if (mat != null && !isZombie)
             mat.color = Color.white * (energy / maxEnergy);
 
         // 1. Update receptor.
