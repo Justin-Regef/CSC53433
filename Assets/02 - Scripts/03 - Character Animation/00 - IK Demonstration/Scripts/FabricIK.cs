@@ -70,11 +70,8 @@ public class FabricIK : MonoBehaviour
 
             // START TODO ###################
 
-            // Just a placeholder. Change with the correct transform!
-            bones[i] = transform.parent;
-
-            // bones[i] = ...
-            // startingBoneRotation[i] = ...
+            bones[i] = current;
+            startingBoneRotation[i] = current.rotation;
 
             // END TODO ###################
 
@@ -96,8 +93,8 @@ public class FabricIK : MonoBehaviour
             {
                 // START TODO ###################
 
-                // bonesLength[i] = ...
-                // completeLength += ...
+                bonesLength[i] = chainLength;
+                completeLength += chainLength;
 
                 // END TODO ###################
 
@@ -158,9 +155,12 @@ public class FabricIK : MonoBehaviour
         // START TODO ###################
 
         // Change condition!
-        if (true)
+        if ((bones[0].position - target.position).magnitude > completeLength)
         {
-            // bonesPositions[i] = ...
+            for (int i = 1; i < bones.Length; i++){
+                // Same position as the previous bone offset by the vector aiming towards the target, scaled by bonelength.
+                bonesPositions[i] = bonesPositions[i-1] + bonesLength[i - 1] * (target.position - bones[0].position).normalized;
+            }
         }
 
         // END TODO ###################
@@ -169,8 +169,8 @@ public class FabricIK : MonoBehaviour
          * Second, if the target is closer, in such a way that the chain will need to move in order to reach it.
          * In this case, IK takes places. Fabric IK works with a Forward pass and a Backward pass:
          * 
-         * Forward pass: We set the end-effector position where the target is, and we change the position of the bones towards the root, while keeping the distance between them constant.
-         * Backward pass: Since we want the root bone to not move, we place it again in its original position and we again change the position of the bones, now towards the target, also keeping the distance between them constant.
+         * Backward pass: We set the end-effector position where the target is, and we change the position of the bones towards the root, while keeping the distance between them constant.
+         * Forward pass: Since we want the root bone to not move, we place it again in its original position and we again change the position of the bones, now towards the target, also keeping the distance between them constant.
          * 
          * This can be repeated by n iterations, and it is stopped when the end-effector is close enough to the target (measured by delta).
          *
@@ -195,10 +195,12 @@ public class FabricIK : MonoBehaviour
 
                     // START TODO ###################
 
-                    // if...
-                    //     bonesPositions[i] = ...
-                    // else...
-                    //     bonesPositions[i] = ...
+                    if (i == bonesPositions.Length - 1){ // bone is the end-effector
+                        bonesPositions[i] = target.position;
+                    }
+                    else {
+                        bonesPositions[i] = bonesPositions[i + 1] + bonesLength[i] * (bonesPositions[i] - bonesPositions[i + 1]).normalized;
+                    }
 
                     // END TODO ###################
                 }
@@ -211,9 +213,9 @@ public class FabricIK : MonoBehaviour
                      */
 
                     // START TODO ###################
-
-                    // bonesPositions[i] = ...
-
+                    
+                    bonesPositions[i] = bonesPositions[i - 1] + bonesLength[i - 1] * (bonesPositions[i] - bonesPositions[i - 1]).normalized;
+                    
                     // END TODO ###################
 
                 }

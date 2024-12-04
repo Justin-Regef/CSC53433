@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.UI;
 using UnityEngine;
 
 public class FootStepper : MonoBehaviour
@@ -48,11 +49,11 @@ public class FootStepper : MonoBehaviour
 
         // START TODO ###################
 
-        // float distFromHome = ...
-        // float angleFromHome = ...
+        float distFromHome = (this.transform.position - homeTransform.position).magnitude;
+        float angleFromHome = Quaternion.Angle(this.transform.rotation, homeTransform.rotation);
 
         // Change condition!
-        if (false)
+        if (distFromHome > distanceThreshold || angleFromHome > angleThreshold)
         {
             // END TODO ###################
 
@@ -103,13 +104,15 @@ public class FootStepper : MonoBehaviour
 
         // START TODO ###################
 
-        // Vector3 raycastOrigin = ...
+        Vector3 raycastOrigin = homeTransform.position + overshootVector + Vector3.up; // Vector3.up is the vertical offset
+        RaycastHit hit;
 
-        // if (Physics.Raycast(...))
-        // {
-        //  ...
-        //  return true;
-        // }
+        if (Physics.Raycast(raycastOrigin, Vector3.down, out hit, 100))
+        {
+            endPos = hit.point;
+            endNormal = hit.normal;
+            return true;
+        }
 
         // END TODO ###################
 
