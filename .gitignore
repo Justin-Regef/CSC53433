@@ -72,3 +72,6 @@ crashlytics-build.properties
 Assets/04 - Terrain Assets/.DS_Store
 Assets/00 - Scenes/Scene - 1.unity
 Assets/04 - Terrain Assets/Terrain Data/New Terrain.asset
+Assets/02 - Scripts/01 - Terrain Brushes/RoundBrush.cs.meta
+Assets/02 - Scripts/01 - Terrain Brushes/PerlinBrush.cs.meta
+Assets/04 - Terrain Assets/Terrain Data/New Terrain.asset

@@ -154,32 +154,29 @@ public class FootStepper : MonoBehaviour
             timeElapsed += Time.deltaTime;
             float normalizedTime = timeElapsed / moveTime;
 
-            // We could also apply some animation curve(e.g.Easing.EaseInOutCubic) to make the foot go smoother.
+            // We could also apply some animation curve (e.g., Easing.EaseInOutCubic) to make the foot go smoother.
             normalizedTime = Easing.EaseInOutCubic(normalizedTime);
 
             /*
              * We know startPos and endPos. We could interpolate directly from the starting point to the end point, but we have a problem: The movement would be straight and flat on the terrain. Try it out!
              * transform.position = Vector3.Lerp(startPoint, endPoint, normalizedTime);
-             * We need to find a way to guide the foot from the ground to a lifted position, and then put it back on the ground. 
+             * We need to find a way to guide the foot from the ground to a lifted position, and then put it back on the ground.
              * Any idea? Just a tip: https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Constructing_B.C3.A9zier_curves
              */
+            
+            
+            // Create control points for a quadratic Bezier curve
+            Vector3 controlPoint = (startPos + endPos) / 2; //+ Vector3.up * 0.01f; // Lift the control point upwards
 
-            // START TODO ###################
+            // Calculate Bezier curve position
+            Vector3 pointOnCurve = (1 - normalizedTime) * (1 - normalizedTime) * startPos +
+                                   2 * (1 - normalizedTime) * normalizedTime * controlPoint +
+                                   normalizedTime * normalizedTime * endPos;
 
-            // transform.position = ...
+            transform.position = pointOnCurve;
 
-            // END TODO ###################
-
-            /*
-             * You just need now to also move from the starting rotation and the ending rotation.
-             */
-
-            // START TODO ###################
-
-            // transform.rotation = ...
-
-            // END TODO ###################
-
+            // Interpolate rotation
+            transform.rotation = Quaternion.Slerp(startRot, endRot, normalizedTime);
             // Wait for one frame
             yield return null;
         }
