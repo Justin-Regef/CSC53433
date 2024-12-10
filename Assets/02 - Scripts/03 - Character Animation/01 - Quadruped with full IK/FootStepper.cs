@@ -166,7 +166,7 @@ public class FootStepper : MonoBehaviour
             
             
             // Create control points for a quadratic Bezier curve
-            Vector3 controlPoint = (startPos + endPos) / 2; //+ Vector3.up * 0.01f; // Lift the control point upwards
+            Vector3 controlPoint = (startPos + endPos) / 2 + Vector3.up * 0.9f; // Lift the control point upwards
 
             // Calculate Bezier curve position
             Vector3 pointOnCurve = (1 - normalizedTime) * (1 - normalizedTime) * startPos +
