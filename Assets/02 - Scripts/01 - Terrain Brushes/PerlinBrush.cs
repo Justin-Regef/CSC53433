@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class PerlinBrush : TerrainBrush {
 
-
+    public float baseDrawSpeed = 0.1f;
+    public float scale = 0.05f;   // Lower scale for smoother noise
+    public int octaves = 3;       // Number of Perlin noise layers
+    public float persistence = 0.5f;  // Amplitude reduction per octave
+    public float lacunarity = 2f;     // Frequency increase per octave
     public override void draw(int x, int z) {
-        float baseDrawSpeed = 0.1f;
-        float scale = 0.05f;   // Lower scale for smoother noise
-        int octaves = 3;       // Number of Perlin noise layers
-        float persistence = 0.5f;  // Amplitude reduction per octave
-        float lacunarity = 2f;     // Frequency increase per octave
         float baseHeight = Mathf.Max(radius, 25);  // Base height
 
         for (int zi = -radius; zi <= radius; zi++) {
