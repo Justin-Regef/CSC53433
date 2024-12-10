@@ -107,8 +107,8 @@ public class FabricIKQuadruped : MonoBehaviour
             {
                 // START TODO ###################
 
-                bonesLength[i] = chainLength;
-                completeLength += chainLength;
+                bonesLength[i] = (bones[i + 1].position - current.position).magnitude; //chainLength;
+                completeLength += bonesLength[i]; //chainLength;
 
                 // END TODO ###################
 
@@ -258,7 +258,7 @@ public class FabricIKQuadruped : MonoBehaviour
                 }
 
                 // Last check: Is the end-effector close enough to the target?
-                if ((bonesPositions[bonesPositions.Length - 1] - target.position).sqrMagnitude >= delta * delta)
+                if ((bonesPositions[bonesPositions.Length - 1] - target.position).sqrMagnitude < delta * delta)
                 {
                     break;
                 }
