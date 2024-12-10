@@ -84,9 +84,10 @@ public class GeneticAlgo : MonoBehaviour
             }
             else if (dice_roll < 0.02f){
                 Animal animal = decomposing_animals[i].GetComponent<Animal>();
+                Transform goal = decomposing_animals[i].GetComponent<QuadrupedProceduralMotion>().goal;
                 decomposing_animals.Remove(animal.transform.gameObject);
-                int dx = (int)(animal.tfm.position.x / animal.terrainSize.x * detail_sz.x);
-                int dy = (int)(animal.tfm.position.z / animal.terrainSize.y * detail_sz.y);
+                int dx = (int)(goal.position.x / animal.terrainSize.x * detail_sz.x);
+                int dy = (int)(goal.position.z / animal.terrainSize.y * detail_sz.y);
                 details[dy, dx] = 1;
                 Destroy(animal.transform.gameObject);
             }

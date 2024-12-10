@@ -10,7 +10,7 @@ public class QuadrupedProceduralMotion : MonoBehaviour
     // Settings relative to the root motion.
     [Header("Root Motion Settings")]
     public float turnSpeed;
-    public float moveSpeed;
+    public float moveSpeed = 10f;
     public float moveBackwardFactor = 0.5f;
     [Space(20)]
     public float turnAcceleration;

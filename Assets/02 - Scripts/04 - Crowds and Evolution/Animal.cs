@@ -15,7 +15,7 @@ public class Animal : MonoBehaviour
     public float maxAngle = 10.0f;
 
     [Header("Energy parameters")]
-    public float maxEnergy = 10.0f;
+    public float maxEnergy = 100.0f;
     public float lossEnergy = 0.1f;
     public float gainEnergy = 10.0f;
     private float energy;
@@ -52,7 +52,7 @@ public class Animal : MonoBehaviour
         vision = new float[nEyes];
         networkStruct = new int[] { nEyes, 5, 1 };
         energy = maxEnergy;
-        tfm = transform;
+        tfm = GetComponent<QuadrupedProceduralMotion>().goal; //transform;
 
         // Renderer used to update animal color.
         // It needs to be updated for more complex models.
@@ -120,7 +120,8 @@ public class Animal : MonoBehaviour
 
         // 3. Act using actuators.
         float angle = (output[0] * 2.0f - 1.0f) * maxAngle;
-        tfm.Rotate(0.0f, angle, 0.0f);
+        //Transform goal = GetComponent<QuadrupedProceduralMotion>().goal;
+        //tfm.Rotate(0.0f, angle, 0.0f);
     }
 
     /// <summary>
